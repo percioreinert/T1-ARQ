@@ -23,6 +23,10 @@ public class Produto {
     this.qtdade = qtdade;
   }
 
+  public Produto() {
+
+  }
+
   public int getCodigo() {
     return codigo;
   }

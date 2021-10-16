@@ -19,7 +19,7 @@ public class ProdutoRepository implements IProdutoRepository {
 
     @Override
     public Produto findById(long id) {
-        return repository.findById(id);
+        return repository.findById(id).get();
     }
 
     @Override
@@ -34,7 +34,7 @@ public class ProdutoRepository implements IProdutoRepository {
 
     @Override
     public boolean saveAll(List<Produto> produtos) {
-        return repository.saveAll(produtos);
+        return repository.saveAll(produtos) != null;
     }
 
     @Override
@@ -44,6 +44,6 @@ public class ProdutoRepository implements IProdutoRepository {
 
     @Override
     public boolean update(Produto produto) {
-        return repository.update(produto);
+        return repository.save(produto) != null;
     }
 }
