@@ -1,24 +1,17 @@
 package com.bcopstein.negocio.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Produto {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long Id;
-
-
-  private int codigo;
+  private Long codigo;
   private String descricao;
   private double preco;
   private int qtdade;
 
-  public Produto(int codigo, String descricao, double preco, int qtdade) {
+  public Produto(Long codigo, String descricao, double preco, int qtdade) {
     this.codigo = codigo;
     this.descricao = descricao;
     this.preco = preco;
@@ -29,11 +22,7 @@ public class Produto {
 
   }
 
-  public Long getId() {
-    return this.Id;
-  }
-
-  public int getCodigo() {
+  public Long getCodigo() {
     return codigo;
   }
 

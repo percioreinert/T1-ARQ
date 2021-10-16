@@ -12,7 +12,7 @@ public class ItemEstoqueRepository {
         this.repository = repository;
     }
 
-    public ItemEstoque findByCodigo(int codigo) {
-        return repository.findByCodigo(codigo);
+    public ItemEstoque findById(int codigo) {
+        return repository.findById(codigo).get();
     }
 }

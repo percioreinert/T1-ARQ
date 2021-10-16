@@ -1,9 +1,13 @@
 package com.bcopstein.negocio.entities;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 
+@Entity
 public class ItemEstoque {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
     @OneToMany
     @JoinColumn(name = "codigo")
