@@ -1,0 +1,7 @@
+/home/martinwdf/Faculdade/PAS/T5/T1-ARQ/src/main/java/com/bcopstein/negocio/entities/ItemCarrinho.java
+/home/martinwdf/Faculdade/PAS/T5/T1-ARQ/src/main/java/com/bcopstein/negocio/repositories/IProdutoRepository.java
+/home/martinwdf/Faculdade/PAS/T5/T1-ARQ/src/main/java/com/bcopstein/negocio/entities/Produto.java
+/home/martinwdf/Faculdade/PAS/T5/T1-ARQ/src/main/java/com/bcopstein/adaptadores/controllers/SvFachadaRemota.java
+/home/martinwdf/Faculdade/PAS/T5/T1-ARQ/src/main/java/com/bcopstein/adaptadores/repositories/IProdutoRepositoryJPA.java
+/home/martinwdf/Faculdade/PAS/T5/T1-ARQ/src/main/java/com/bcopstein/adaptadores/repositories/ProdutoRepository.java
+/home/martinwdf/Faculdade/PAS/T5/T1-ARQ/src/main/java/com/bcopstein/SvBkPrototipo.java

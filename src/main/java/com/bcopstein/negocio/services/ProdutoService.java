@@ -1,25 +1,26 @@
 package com.bcopstein.negocio.services;
 
-import com.bcopstein.adaptadores.repositories.ItemEstoqueRepository;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.bcopstein.negocio.entities.ItemCarrinho;
 import com.bcopstein.negocio.entities.ItemEstoque;
 import com.bcopstein.negocio.entities.Produto;
+import com.bcopstein.negocio.repositories.IEstoqueRepository;
 import com.bcopstein.negocio.repositories.IProdutoRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class ProdutoService {
 
     private IProdutoRepository repository;
-    private ItemEstoqueRepository estoqueRepository;
+    private IEstoqueRepository estoqueRepository;
     private List<String> vendasEfetuadas;
 
     @Autowired
-    public ProdutoService(IProdutoRepository repository, ItemEstoqueRepository estoqueRepository) {
+    public ProdutoService(IProdutoRepository repository, IEstoqueRepository estoqueRepository) {
         this.repository = repository;
         this.estoqueRepository = estoqueRepository;
     }
@@ -95,11 +96,11 @@ public class ProdutoService {
         return this.vendasEfetuadas;
     }
 
-    public boolean podeVender(Integer codProd, Integer qtdade) {
-        int quantidade = estoqueRepository.findByCodigo(codProd)
+    public boolean podeVender(Long codProd, Integer qtdade) {
+        ItemEstoque item = estoqueRepository.findByCodProd(codProd);
+        if(item == null) return false;
+        int quantidade = estoqueRepository.findByCodProd(codProd).getQtdProduto();
 
-        final boolean disponivel = ;
-                produtos.stream().anyMatch(p -> p.getCodigo() == codProd && p.getQtdade() >= qtdade);
-        return disponivel;
+        return quantidade >= qtdade;
     }
 }

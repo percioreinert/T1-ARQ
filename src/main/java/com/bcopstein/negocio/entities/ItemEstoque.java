@@ -12,5 +12,15 @@ public class ItemEstoque {
     @OneToMany
     @JoinColumn(name = "codigo")
     private Produto produto;
-    private int codigo;
+    private int qtdProduto;
+
+    public ItemEstoque(Produto produto, int qtdProduto){
+        this.produto=produto;
+        this.qtdProduto=qtdProduto;
+    }
+
+    public int getQtdProduto(){return this.qtdProduto;}
+    public void setQtdProduto(int qtdProduto){this.qtdProduto=qtdProduto;}
+
+    public Produto getProduto(){return this.produto;}
 }

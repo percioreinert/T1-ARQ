@@ -9,7 +9,6 @@ public interface IProdutoRepository {
 
     Produto findById(long id);
     Iterable<Produto> findAll();
-    Produto findByCodProd();
     Produto save(Produto produto);
     boolean saveAll(List<Produto> produtos);
     void delete(Produto produto);
