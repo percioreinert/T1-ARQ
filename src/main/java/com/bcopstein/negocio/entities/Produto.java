@@ -11,6 +11,8 @@ public class Produto {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long Id;
+
+
   private int codigo;
   private String descricao;
   private double preco;
@@ -25,6 +27,10 @@ public class Produto {
 
   public Produto() {
 
+  }
+
+  public Long getId() {
+    return this.Id;
   }
 
   public int getCodigo() {

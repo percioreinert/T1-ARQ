@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/vendas")
 public class SvFachadaRemota {
-  //private final List<Produto> produtos;
-  //private final List<String> vendasEfetuadas;
 
   private ProdutoService service;
 
@@ -36,76 +34,24 @@ public class SvFachadaRemota {
   @CrossOrigin(origins = "*")
   public boolean podeVender(@RequestParam final Integer codProd,
                             @RequestParam final Integer qtdade) {
-    final boolean disponivel =
-        produtos.stream().anyMatch(p -> p.getCodigo() == codProd && p.getQtdade() >= qtdade);
-    return disponivel;
+    return service.podeVender(codProd, qtdade);
   }
 
   @PostMapping("/confirmacao")
   @CrossOrigin(origins = "*")
   public boolean confirmaVenda(@RequestBody final ItemCarrinho[] itens) {
-
-    ArrayList<Produto> listaProdutos = new ArrayList<>();
-    ArrayList<Integer> listaQtdades = new ArrayList<>();
-
-    for (ItemCarrinho item : itens) {
-      final Produto produto =
-          produtos.stream().filter(p -> p.getCodigo() == item.getCodigo()).findAny().orElse(null);
-
-      if (produto == null) {
-        return false;
-      }
-
-      listaQtdades.add(item.getQuantidade());
-      listaProdutos.add(produto);
-    }
-
-    StringBuilder builder = new StringBuilder();
-
-    for (int i = 0; i < listaProdutos.size(); i++) {
-      final Produto produto = listaProdutos.get(i);
-      final int qtdade = listaQtdades.get(i);
-      produto.saidaDeProduto(qtdade);
-
-      builder.append(produto.getCodigo());
-      builder.append(" ");
-      builder.append(produto.getDescricao());
-      builder.append(" ");
-      builder.append(qtdade);
-      builder.append("\n");
-    }
-
-    vendasEfetuadas.add(builder.toString());
-    return true;
+    return service.confirmaVenda(itens);
   }
 
   @GetMapping("/historico")
   @CrossOrigin(origins = "*")
   public List<String> vendasEfetuadas() {
-    return vendasEfetuadas;
+    return service.vendasEfetuadas();
   }
 
   @PostMapping("/subtotal")
   @CrossOrigin(origins = "*")
   public Integer[] calculaSubtotal(@RequestBody final ItemCarrinho[] itens) {
-    Integer subtotal = 0;
-    Integer imposto = 0;
-
-    for (final ItemCarrinho it : itens) {
-      // Procurar o produto pelo código
-      final Produto prod =
-          produtos.stream().filter(p -> p.getCodigo() == it.getCodigo()).findAny().orElse(null);
-
-      if (prod != null) {
-        subtotal += (int) (prod.getPreco() * it.getQuantidade());
-      } else {
-        throw new IllegalArgumentException("Codigo invalido");
-      }
-    }
-    imposto = (int) (subtotal * 0.1);
-    final Integer[] resp = new Integer[3];
-    resp[0] = subtotal;
-    resp[1] = imposto;
-    resp[2] = subtotal + imposto;
-    return resp;
-  }}
+    return service.calculaSubtotal(itens);
+  }
+}
