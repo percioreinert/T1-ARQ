@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.bcopstein.negocio.entities.ItemCarrinho;
 import com.bcopstein.negocio.entities.Produto;
+import com.bcopstein.negocio.services.ProdutoService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,26 +17,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/vendas")
 public class SvFachadaRemota {
-  private final List<Produto> produtos;
-  private final List<String> vendasEfetuadas;
+  //private final List<Produto> produtos;
+  //private final List<String> vendasEfetuadas;
 
-  public SvFachadaRemota() {
-    // Cria e carrega o estoque
-    produtos = new ArrayList<>();
-    produtos.add(new Produto(10, "Geladeira", 2500.0, 10));
-    produtos.add(new Produto(20, "Fogao", 1200.0, 0));
-    produtos.add(new Produto(30, "Lava louça", 4300.0, 7));
-    produtos.add(new Produto(40, "Lava roupa", 3350.0, 11));
-    produtos.add(new Produto(50, "Aspirador de pó", 780.0, 22));
+  private ProdutoService service;
 
-    // Cria a lista de vendas efetuadas
-    vendasEfetuadas = new ArrayList<>();
+  public SvFachadaRemota(ProdutoService service) {
+    this.service = service;
   }
 
   @GetMapping("/produtos")
   @CrossOrigin(origins = "*")
   public List<Produto> listaProdutos() {
-    return produtos;
+    return service.findAll();
   }
 
   @GetMapping("/autorizacao")
