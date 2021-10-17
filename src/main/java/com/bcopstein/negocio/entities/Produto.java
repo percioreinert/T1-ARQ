@@ -2,12 +2,13 @@ package com.bcopstein.negocio.entities;
 
 import javax.persistence.*;
 
-@Entity
+@Entity(name = "produtos")
 public class Produto {
 
   @Id
+  @Column(name="codigo")
   private Long codigo;
-
+  
   @OneToOne(mappedBy = "produto")
   private ItemEstoque itemEstoque;
   private String descricao;
@@ -21,9 +22,9 @@ public class Produto {
     this.qtdade = qtdade;
   }
 
-  public Produto() {
+  // public Produto() {
 
-  }
+  // }
 
   public Long getCodigo() {
     return codigo;
