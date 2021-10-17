@@ -1,11 +1,11 @@
 package com.bcopstein.adaptadores.repositories;
 
 import com.bcopstein.negocio.entities.ItemEstoque;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
+import org.springframework.data.repository.CrudRepository;
+
 public interface IEstoqueRepositoryJPA extends CrudRepository<ItemEstoque, Integer> {
 
-    //ItemEstoque findByCodProd(Long codigo);
+    ItemEstoque findByProduto(long codigo);
+    int findQtdProdutoByProduto(long codigo);
 }

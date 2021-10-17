@@ -1,7 +1,6 @@
 package com.bcopstein.negocio.repositories;
 
 import com.bcopstein.negocio.entities.Produto;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 

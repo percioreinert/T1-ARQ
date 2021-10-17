@@ -12,14 +12,12 @@ public class Produto {
   @OneToOne(mappedBy = "produto")
   private ItemEstoque itemEstoque;
   private String descricao;
-  private double preco;
-  private int qtdade;
+  private int preco;
 
-  public Produto(Long codigo, String descricao, double preco, int qtdade) {
+  public Produto(Long codigo, String descricao, int preco) {
     this.codigo = codigo;
     this.descricao = descricao;
     this.preco = preco;
-    this.qtdade = qtdade;
   }
 
   // public Produto() {
@@ -34,25 +32,18 @@ public class Produto {
     return descricao;
   }
 
-  public double getPreco() {
+  public int getPreco() {
     return preco;
   }
 
-  public int getQtdade() {
-    return qtdade;
-  }
 
-  public void saidaDeProduto(int qtdade) {
-    this.qtdade -= qtdade;
-  }
-
-  public void setPreco(double preco) {
+  public void setPreco(int preco) {
     this.preco = preco;
   }
 
   @Override
   public String toString() {
     return "Produto [codigo=" + codigo + ", descricao=" + descricao + ", preco=" + preco
-        + ", qtdade=" + qtdade + "]";
+        + "]";
   }
 }

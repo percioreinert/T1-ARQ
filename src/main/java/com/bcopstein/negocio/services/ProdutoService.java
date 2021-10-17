@@ -3,9 +3,7 @@ package com.bcopstein.negocio.services;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bcopstein.negocio.entities.ItemEstoque;
 import com.bcopstein.negocio.entities.Produto;
-import com.bcopstein.negocio.repositories.IEstoqueRepository;
 import com.bcopstein.negocio.repositories.IProdutoRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,15 +13,11 @@ import org.springframework.stereotype.Service;
 public class ProdutoService {
 
     private IProdutoRepository repository;
-    private IEstoqueRepository estoqueRepository;
-    private List<String> vendasEfetuadas;
 
     @Autowired
-    public ProdutoService(IProdutoRepository repository, IEstoqueRepository estoqueRepository) {
+    public ProdutoService(IProdutoRepository repository) {
         this.repository = repository;
-        this.estoqueRepository = estoqueRepository;
     }
-
 
     public List<Produto> findAll() {
         Iterable<Produto> produtos = repository.findAll();
@@ -34,73 +28,9 @@ public class ProdutoService {
         }
         return produtosList;
     }
-
-    public Integer[] calculaSubtotal(ItemEstoque[] itens) {
-        Integer subtotal = 0;
-        Integer imposto = 0;
-
-        for (final ItemEstoque it : itens) {
-            // Procurar o produto pelo código
-            final Produto prod = repository.findById(it.getCodigo());
-            if (prod != null) {
-                subtotal += (int) (prod.getPreco() * it.getQtdProduto());
-            } else {
-                throw new IllegalArgumentException("Codigo invalido");
-            }
-        }
-        imposto = (int) (subtotal * 0.1);
-        final Integer[] resp = new Integer[3];
-        resp[0] = subtotal;
-        resp[1] = imposto;
-        resp[2] = subtotal + imposto;
-        return resp;
+    public Produto findProduto(long codigo){
+        return repository.findById(codigo);
     }
 
-    public boolean confirmaVenda(ItemEstoque[] itens) {
-        vendasEfetuadas = new ArrayList<>();
-        ArrayList<Produto> listaProdutos = new ArrayList<>();
-        ArrayList<Integer> listaQtdades = new ArrayList<>();
 
-        for (ItemEstoque item : itens) {
-            final Produto produto = repository.findById(item.getCodigo());
-
-            if (produto == null) {
-                return false;
-            }
-
-            listaQtdades.add(item.getQtdProduto());
-            listaProdutos.add(produto);
-        }
-
-        StringBuilder builder = new StringBuilder();
-
-        for (int i = 0; i < listaProdutos.size(); i++) {
-            final Produto produto = listaProdutos.get(i);
-            final int qtdade = listaQtdades.get(i);
-            produto.saidaDeProduto(qtdade);
-
-            builder.append(produto.getCodigo());
-            builder.append(" ");
-            builder.append(produto.getDescricao());
-            builder.append(" ");
-            builder.append(qtdade);
-            builder.append("\n");
-        }
-
-        vendasEfetuadas.add(builder.toString());
-        return true;
-    }
-
-    public List<String> vendasEfetuadas() {
-        return this.vendasEfetuadas;
-    }
-
-    public boolean podeVender(Long codProd, Integer qtdade) {
-        //ItemEstoque item = estoqueRepository.findByCodProd(codProd);
-        //if(item == null) return false;
-        //int quantidade = estoqueRepository.findByCodProd(codProd).getQtdProduto();
-
-        //return quantidade >= qtdade;
-        return true;
-    }
 }
