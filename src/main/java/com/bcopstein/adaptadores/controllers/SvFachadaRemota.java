@@ -1,11 +1,11 @@
 package com.bcopstein.adaptadores.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import com.bcopstein.negocio.entities.ItemCarrinho;
+import com.bcopstein.negocio.entities.ItemEstoque;
 import com.bcopstein.negocio.entities.Produto;
 import com.bcopstein.negocio.services.ProdutoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +20,7 @@ public class SvFachadaRemota {
 
   private ProdutoService service;
 
+  @Autowired
   public SvFachadaRemota(ProdutoService service) {
     this.service = service;
   }
@@ -39,7 +40,7 @@ public class SvFachadaRemota {
 
   @PostMapping("/confirmacao")
   @CrossOrigin(origins = "*")
-  public boolean confirmaVenda(@RequestBody final ItemCarrinho[] itens) {
+  public boolean confirmaVenda(@RequestBody final ItemEstoque[] itens) {
     return service.confirmaVenda(itens);
   }
 
@@ -51,7 +52,7 @@ public class SvFachadaRemota {
 
   @PostMapping("/subtotal")
   @CrossOrigin(origins = "*")
-  public Integer[] calculaSubtotal(@RequestBody final ItemCarrinho[] itens) {
+  public Integer[] calculaSubtotal(@RequestBody final ItemEstoque[] itens) {
     return service.calculaSubtotal(itens);
   }
 }

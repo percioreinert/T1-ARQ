@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IEstoqueRepositoryJPA extends CrudRepository<ItemEstoque, Integer> {
 
-    ItemEstoque findByCodProd(Long codigo);
+    //ItemEstoque findByCodProd(Long codigo);
 }

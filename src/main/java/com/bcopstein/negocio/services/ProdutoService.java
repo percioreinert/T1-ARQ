@@ -3,16 +3,15 @@ package com.bcopstein.negocio.services;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.bcopstein.negocio.entities.ItemCarrinho;
 import com.bcopstein.negocio.entities.ItemEstoque;
 import com.bcopstein.negocio.entities.Produto;
 import com.bcopstein.negocio.repositories.IEstoqueRepository;
 import com.bcopstein.negocio.repositories.IProdutoRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class ProdutoService {
 
     private IProdutoRepository repository;
@@ -36,15 +35,15 @@ public class ProdutoService {
         return produtosList;
     }
 
-    public Integer[] calculaSubtotal(ItemCarrinho[] itens) {
+    public Integer[] calculaSubtotal(ItemEstoque[] itens) {
         Integer subtotal = 0;
         Integer imposto = 0;
 
-        for (final ItemCarrinho it : itens) {
+        for (final ItemEstoque it : itens) {
             // Procurar o produto pelo código
             final Produto prod = repository.findById(it.getCodigo());
             if (prod != null) {
-                subtotal += (int) (prod.getPreco() * it.getQuantidade());
+                subtotal += (int) (prod.getPreco() * it.getQtdProduto());
             } else {
                 throw new IllegalArgumentException("Codigo invalido");
             }
@@ -57,19 +56,19 @@ public class ProdutoService {
         return resp;
     }
 
-    public boolean confirmaVenda(ItemCarrinho[] itens) {
+    public boolean confirmaVenda(ItemEstoque[] itens) {
         vendasEfetuadas = new ArrayList<>();
         ArrayList<Produto> listaProdutos = new ArrayList<>();
         ArrayList<Integer> listaQtdades = new ArrayList<>();
 
-        for (ItemCarrinho item : itens) {
+        for (ItemEstoque item : itens) {
             final Produto produto = repository.findById(item.getCodigo());
 
             if (produto == null) {
                 return false;
             }
 
-            listaQtdades.add(item.getQuantidade());
+            listaQtdades.add(item.getQtdProduto());
             listaProdutos.add(produto);
         }
 
@@ -97,10 +96,11 @@ public class ProdutoService {
     }
 
     public boolean podeVender(Long codProd, Integer qtdade) {
-        ItemEstoque item = estoqueRepository.findByCodProd(codProd);
-        if(item == null) return false;
-        int quantidade = estoqueRepository.findByCodProd(codProd).getQtdProduto();
+        //ItemEstoque item = estoqueRepository.findByCodProd(codProd);
+        //if(item == null) return false;
+        //int quantidade = estoqueRepository.findByCodProd(codProd).getQtdProduto();
 
-        return quantidade >= qtdade;
+        //return quantidade >= qtdade;
+        return true;
     }
 }

@@ -7,6 +7,9 @@ public class Produto {
 
   @Id
   private Long codigo;
+
+  @OneToOne(mappedBy = "produto")
+  private ItemEstoque itemEstoque;
   private String descricao;
   private double preco;
   private int qtdade;

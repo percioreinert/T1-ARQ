@@ -3,21 +3,24 @@ package com.bcopstein.adaptadores.repositories;
 import com.bcopstein.negocio.entities.ItemEstoque;
 import com.bcopstein.negocio.repositories.IEstoqueRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
-public class EstoqueRepository implements IEstoqueRepository{
+public class EstoqueRepository implements IEstoqueRepository {
 
     private IEstoqueRepositoryJPA repository;
 
-    
+    @Autowired
     public EstoqueRepository(IEstoqueRepositoryJPA repository) {
         this.repository = repository;
     }
 
-    public ItemEstoque findByCodProd(long codigo) {
-        return repository.findByCodProd(codigo);
-    }
+    //public ItemEstoque findByCodProd(long codigo) {
+    //    return repository.findByCodProd(codigo);
+    //}
 
     @Override
     public Iterable<ItemEstoque> findAll() {
@@ -29,19 +32,13 @@ public class EstoqueRepository implements IEstoqueRepository{
         return repository.save(item);
     }
 
-    // @Override
-    // public boolean saveAll(List<Produto> produtos) {
-    //     return repository.saveAll(produtos) != null;
-    // }
+    @Override
+    public boolean saveAll(List<ItemEstoque> itens) {
+        return repository.saveAll(itens) != null;
+    }
 
-    // @Override
-    // public void delete(Produto produto) {
-    //     repository.delete(produto);
-    // }
-
-    // @Override
-    // public boolean update(Produto produto) {
-    //     return repository.save(produto) != null;
-    // }
-}
+    @Override
+    public void delete(ItemEstoque item) {
+        repository.delete(item);
+    }
 }
