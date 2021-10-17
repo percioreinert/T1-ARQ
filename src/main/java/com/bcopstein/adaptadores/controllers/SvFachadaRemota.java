@@ -32,7 +32,7 @@ public class SvFachadaRemota {
 
   @GetMapping("/autorizacao")
   @CrossOrigin(origins = "*")
-  public boolean podeVender(@RequestParam final Integer codProd,
+  public boolean podeVender(@RequestParam final Long codProd,
                             @RequestParam final Integer qtdade) {
     return service.podeVender(codProd, qtdade);
   }
