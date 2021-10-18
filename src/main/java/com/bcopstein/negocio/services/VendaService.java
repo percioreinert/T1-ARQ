@@ -13,6 +13,8 @@ import com.bcopstein.negocio.repositories.IVendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ch.qos.logback.core.joran.conditional.ElseAction;
+
 @Service
 public class VendaService {
 
@@ -104,5 +106,17 @@ public class VendaService {
            itens.add(v);
         }
         return itens;
+    }
+    public boolean podeVender(long codProd, int qtdade){
+        ItemEstoque item = estoqueService.getItemEstoque(codProd);
+        if(item == null) return false;
+        if(qtdade > item.getQtdProduto())
+            return false;
+        else if (qtdade < 0)return false;
+        else{
+            item.setQtdProduto(item.getQtdProduto()-qtdade);
+            estoqueService.save(item);   
+        }
+        return true;
     }
 }
