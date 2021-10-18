@@ -9,7 +9,7 @@ public class ItemEstoque {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL, optional = false)
+    @OneToOne(cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
     @JoinColumn(name = "cod_produto")
     private Produto produto;
     
@@ -17,8 +17,9 @@ public class ItemEstoque {
 
     public ItemEstoque() {}
 
-    public ItemEstoque(int qtdProduto) {
+    public ItemEstoque(Produto produto, int qtdProduto) {
         this.qtdProduto = qtdProduto;
+        this.produto=produto;
     }
 
     public int getQtdProduto(){return this.qtdProduto;}

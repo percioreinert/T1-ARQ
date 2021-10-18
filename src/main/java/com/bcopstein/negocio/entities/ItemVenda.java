@@ -8,11 +8,13 @@ public class ItemVenda {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     
+    @ManyToOne
+    private Venda venda;
     private int qtdProduto;
     private int precoUnit;
     private long imposto;
 
-    @OneToOne(cascade = CascadeType.ALL, optional = false)
+    @OneToOne(cascade = CascadeType.ALL, optional = false,  orphanRemoval = true)
     @JoinColumn(name = "cod_produto")
     private Produto produto;
 

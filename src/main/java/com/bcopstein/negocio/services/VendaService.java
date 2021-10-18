@@ -1,8 +1,10 @@
 package com.bcopstein.negocio.services;
 
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.bcopstein.negocio.entities.*;
 import com.bcopstein.negocio.repositories.IEstoqueRepository;
@@ -51,15 +53,15 @@ public class VendaService {
     public boolean confirmaVenda(ItemEstoque[] itens) {
         ArrayList<ItemVenda> listaItemVenda = new ArrayList<>();
         HashMap<Long, Integer> qtdadePorProduto = new HashMap<>();
-        ItemEstoque itemEstoqueRep = null;
+        //ItemEstoque itemEstoqueRep = null;
         for (ItemEstoque item : itens) {
             long codigoProduto = item.getProduto() != null ? item.getCodigo() : -1L;
             int quantidade = item.getQtdProduto();
-            if(quantidade < 0)
-                return false;
-            itemEstoqueRep = estoqueService.getItemEstoque(codigoProduto);
-            if(itemEstoqueRep == null)
-                return false;
+            // if(quantidade < 0)
+            //     return false;
+            ItemEstoque itemEstoqueRep = item;
+            // if(itemEstoqueRep == null)
+            //     return false;
             if(!qtdadePorProduto.containsKey(codigoProduto)){
                 if(itemEstoqueRep.getQtdProduto() - quantidade >= 0)
                     qtdadePorProduto.put(codigoProduto, itemEstoqueRep.getQtdProduto() - quantidade);
@@ -84,12 +86,23 @@ public class VendaService {
          else
             listaItemVenda.add(new ItemVenda(quantidade, itemEstoqueRep.getProduto().getPreco(), IMPOSTO, itemEstoqueRep.getProduto()));
         }
+
         Venda venda = new Venda(LocalDateTime.now(), listaItemVenda);
         vendaRepository.save(venda);
+        // for(ItemEstoque item: estoqueService.findAll()){
+        //     item.setQtdProduto();
+        //     estoqueService.save(estoqueService.getItemEstoque(item.getCodigo()));
+        // }
         return true;
     }
 
-    public Iterable<Venda> vendasEfetuadas() {
-        return vendaRepository.findAll();
+    public List<Venda> vendasEfetuadas() {
+        Iterable<Venda> vendas = vendaRepository.findAll();
+        List<Venda> itens = new ArrayList<>();
+
+        for (Venda v : vendas) {
+           itens.add(v);
+        }
+        return itens;
     }
 }

@@ -28,6 +28,9 @@ public class ProdutoService {
         }
         return produtosList;
     }
+    public Produto save(Produto p){
+        return repository.save(p);
+    }
     public Produto findProduto(long codigo){
         return repository.findById(codigo);
     }

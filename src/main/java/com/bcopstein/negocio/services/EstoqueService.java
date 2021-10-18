@@ -1,5 +1,8 @@
 package com.bcopstein.negocio.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.bcopstein.negocio.entities.ItemEstoque;
 import com.bcopstein.negocio.repositories.IEstoqueRepository;
 
@@ -30,5 +33,17 @@ public class EstoqueService {
     }
     public ItemEstoque getItemEstoque(Long codPro){
         return estoqueRepository.findByProduto(codPro);
+    }
+    public ItemEstoque save(ItemEstoque item){
+        return estoqueRepository.save(item);
+    }
+    public List<ItemEstoque> findAll() {
+        Iterable<ItemEstoque> estoque = estoqueRepository.findAll();
+        List<ItemEstoque> itens = new ArrayList<>();
+
+        for (ItemEstoque p : estoque) {
+           itens.add(p);
+        }
+        return itens;
     }
 }

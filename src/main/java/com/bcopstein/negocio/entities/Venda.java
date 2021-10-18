@@ -15,15 +15,15 @@ public class Venda {
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime dateTime;
 
-    @OneToMany
-    @JoinColumn(name = "id")
+    @OneToMany(mappedBy = "venda")
+    // @JoinColumn(name = "id")
     private List<ItemVenda> itemVendas;
 
     public Venda(LocalDateTime dateTime, List<ItemVenda> itemVendas){
         this.dateTime = dateTime;
         this.itemVendas = itemVendas;
     }
-
+    public Venda(){}
     public long getNumero(){return numero;}
     public LocalDateTime getDateTime(){return dateTime;}
     public List<ItemVenda> getItemVendas(){return itemVendas;}
