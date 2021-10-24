@@ -19,8 +19,8 @@ public class EstoqueRepository implements IEstoqueRepository {
     }
 
     @Override
-    public ItemEstoque findByProduto(long codigo) {
-       return repository.findByProduto(codigo);
+    public ItemEstoque findByProdutoCodigo(long codigo) {
+       return repository.findByProdutoCodigo(codigo);
     }   
     
     @Override

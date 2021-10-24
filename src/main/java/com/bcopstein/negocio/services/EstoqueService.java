@@ -20,19 +20,19 @@ public class EstoqueService {
     }
 
     public boolean podeVender(Long codProd, Integer qtdade) {
-        ItemEstoque item = estoqueRepository.findByProduto(codProd);
+        ItemEstoque item = estoqueRepository.findByProdutoCodigo(codProd);
         if(item == null) return false;
         int quantidade = item.getQtdProduto();
 
         return quantidade >= qtdade;
     }
     public int getQuantidade(Long codProd){
-        ItemEstoque item = estoqueRepository.findByProduto(codProd);
+        ItemEstoque item = estoqueRepository.findByProdutoCodigo(codProd);
         if(item == null) return -1;
         return item.getQtdProduto();
     }
     public ItemEstoque getItemEstoque(Long codPro){
-        return estoqueRepository.findByProduto(codPro);
+        return estoqueRepository.findByProdutoCodigo(codPro);
     }
     public ItemEstoque save(ItemEstoque item){
         return estoqueRepository.save(item);

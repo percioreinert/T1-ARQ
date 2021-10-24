@@ -2,7 +2,8 @@ package com.bcopstein.negocio.entities;
 
 import javax.persistence.*;
 
-@Entity(name = "produtos")
+@Table(name = "produtos")
+@Entity(name = "Produto")
 public class Produto {
 
   @Id

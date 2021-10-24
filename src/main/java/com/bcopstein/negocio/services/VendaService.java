@@ -55,15 +55,17 @@ public class VendaService {
     public boolean confirmaVenda(ItemEstoque[] itens) {
         ArrayList<ItemVenda> listaItemVenda = new ArrayList<>();
         HashMap<Long, Integer> qtdadePorProduto = new HashMap<>();
-        //ItemEstoque itemEstoqueRep = null;
+        ItemEstoque itemEstoqueRep = null;
+        Venda venda = new Venda(LocalDateTime.now(), listaItemVenda);
         for (ItemEstoque item : itens) {
             long codigoProduto = item.getProduto() != null ? item.getCodigo() : -1L;
             int quantidade = item.getQtdProduto();
-            // if(quantidade < 0)
-            //     return false;
-            ItemEstoque itemEstoqueRep = item;
-            // if(itemEstoqueRep == null)
-            //     return false;
+            if(quantidade < 0)
+                return false;
+            
+            itemEstoqueRep = estoqueService.getItemEstoque(codigoProduto);
+            if(itemEstoqueRep == null)
+                return false;
             if(!qtdadePorProduto.containsKey(codigoProduto)){
                 if(itemEstoqueRep.getQtdProduto() - quantidade >= 0)
                     qtdadePorProduto.put(codigoProduto, itemEstoqueRep.getQtdProduto() - quantidade);
@@ -86,10 +88,8 @@ public class VendaService {
             listaItemVenda.add(itemLista);
          }
          else
-            listaItemVenda.add(new ItemVenda(quantidade, itemEstoqueRep.getProduto().getPreco(), IMPOSTO, itemEstoqueRep.getProduto()));
+            listaItemVenda.add(new ItemVenda(quantidade, itemEstoqueRep.getProduto().getPreco(), IMPOSTO, itemEstoqueRep.getProduto(), venda));
         }
-
-        Venda venda = new Venda(LocalDateTime.now(), listaItemVenda);
         vendaRepository.save(venda);
         // for(ItemEstoque item: estoqueService.findAll()){
         //     item.setQtdProduto();

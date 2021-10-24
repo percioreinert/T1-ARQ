@@ -9,7 +9,7 @@ public interface IEstoqueRepository {
 
     Iterable<ItemEstoque> findAll();
     int findQtdProdutoByProduto(long codigo);
-    ItemEstoque findByProduto(long codigo);
+    ItemEstoque findByProdutoCodigo(long codigo);
     ItemEstoque save(ItemEstoque item);
     boolean saveAll(List<ItemEstoque> itens);
     void delete(ItemEstoque item);

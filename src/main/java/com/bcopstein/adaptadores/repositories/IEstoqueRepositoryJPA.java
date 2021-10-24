@@ -6,6 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface IEstoqueRepositoryJPA extends CrudRepository<ItemEstoque, Integer> {
 
-    ItemEstoque findByProduto(long codigo);
+    ItemEstoque findByProdutoCodigo(long codigo);
     int findQtdProdutoByProduto(long codigo);
 }

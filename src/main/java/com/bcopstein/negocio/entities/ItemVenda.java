@@ -2,13 +2,15 @@ package com.bcopstein.negocio.entities;
 
 import javax.persistence.*;
 
-@Entity(name = "item_vendas")
+@Entity(name = "ItemVenda")
+@Table(name = "item_vendas")
 public class ItemVenda {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @ManyToOne
+    @JoinColumn(name="vendas_id", nullable=false)
     private Venda venda;
     private int qtdProduto;
     private int precoUnit;
@@ -18,11 +20,15 @@ public class ItemVenda {
     @JoinColumn(name = "cod_produto")
     private Produto produto;
 
-    public ItemVenda(int qtdProduto, int precoUnit, long imposto, Produto produto) {
+    public ItemVenda(int qtdProduto, int precoUnit, long imposto, Produto produto, Venda venda) {
         this.qtdProduto = qtdProduto;
         this.precoUnit = precoUnit;
+        this.imposto = imposto;
         this.produto = produto;
+        this.venda = venda;
     }
+    
+    public ItemVenda(){}
     public long getImposto() {
         return imposto;
     }

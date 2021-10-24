@@ -5,18 +5,18 @@ import java.util.List;
 
 import javax.persistence.*;
 
-@Entity(name = "vendas")
+@Entity(name = "Venda")
+@Table(name = "vendas")
 public class Venda {
     
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private long numero;
 
     @Column(columnDefinition = "TIMESTAMP")
     private LocalDateTime dateTime;
 
-    @OneToMany(mappedBy = "venda")
-    // @JoinColumn(name = "id")
+    @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, fetch = FetchType.EAGER,targetEntity = ItemVenda.class)
     private List<ItemVenda> itemVendas;
 
     public Venda(LocalDateTime dateTime, List<ItemVenda> itemVendas){

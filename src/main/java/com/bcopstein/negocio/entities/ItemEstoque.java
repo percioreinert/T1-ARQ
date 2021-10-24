@@ -2,11 +2,12 @@ package com.bcopstein.negocio.entities;
 
 import javax.persistence.*;
 
-@Entity(name = "item_estoques")
+@Table(name = "item_estoques")
+@Entity(name = "ItemEstoque")
 public class ItemEstoque {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne(cascade = CascadeType.ALL, optional = false, orphanRemoval = true)
