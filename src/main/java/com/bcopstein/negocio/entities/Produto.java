@@ -15,16 +15,13 @@ public class Produto {
   private String descricao;
   private int preco;
 
-  public Produto(int codigo, String descricao, int preco) {
-    this.codigo = (long) codigo;
+  public Produto(long codigo, String descricao, int preco) {
+    this.codigo = codigo;
     this.descricao = descricao;
     this.preco = preco;
   }
   public Produto(){}
-  // public Produto() {
-
-  // }
-
+  
   public Long getCodigo() {
     return codigo;
   }

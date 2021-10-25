@@ -1,9 +1,7 @@
 package com.bcopstein.negocio.services;
 
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import com.bcopstein.negocio.entities.*;
@@ -13,7 +11,6 @@ import com.bcopstein.negocio.repositories.IVendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ch.qos.logback.core.joran.conditional.ElseAction;
 
 @Service
 public class VendaService {
@@ -32,19 +29,17 @@ public class VendaService {
     }
 
     public Integer[] calculaSubtotal(ItemEstoque[] itens) {
-        Integer subtotal = 0;
-        Integer imposto = 0;
+        int subtotal = 0;
+        int imposto = 0;
+        for (ItemEstoque it : itens) {
+            validaItemEstoque(it, 0);
+            int quantidade = it.getQuantidade();
+            it = estoqueService.getItemEstoque(it.getCodigo()); 
+            validaItemEstoque(it, quantidade);
+            subtotal += (int) (it.getProduto().getPreco() * quantidade);
 
-        for (final ItemEstoque it : itens) {
-            if (it != null) {
-                Produto produto = it.getProduto();
-                if(produto != null)
-                    subtotal += (int) (produto.getPreco() * it.getQtdProduto());
-            } else {
-                throw new IllegalArgumentException("Codigo invalido");
-            }
         }
-        imposto = (int) (subtotal * 0.1);
+        imposto = (int)(subtotal * (IMPOSTO / 100.0));
         final Integer[] resp = new Integer[3];
         resp[0] = subtotal;
         resp[1] = imposto;
@@ -54,69 +49,73 @@ public class VendaService {
     
     public boolean confirmaVenda(ItemEstoque[] itens) {
         ArrayList<ItemVenda> listaItemVenda = new ArrayList<>();
-        HashMap<Long, Integer> qtdadePorProduto = new HashMap<>();
-        ItemEstoque itemEstoqueRep = null;
+        ArrayList<ItemEstoque> listaItemEstoque = new ArrayList<>();
         Venda venda = new Venda(LocalDateTime.now(), listaItemVenda);
         for (ItemEstoque item : itens) {
-            long codigoProduto = item.getProduto() != null ? item.getCodigo() : -1L;
-            int quantidade = item.getQtdProduto();
-            if(quantidade < 0)
+
+            if(item.getProduto() == null)
                 return false;
+
+            long codigoProduto = item.getCodigo();
+            int quantidade = item.getQuantidade();
             
-            itemEstoqueRep = estoqueService.getItemEstoque(codigoProduto);
-            if(itemEstoqueRep == null)
+            if(quantidade <= 0)
                 return false;
-            if(!qtdadePorProduto.containsKey(codigoProduto)){
-                if(itemEstoqueRep.getQtdProduto() - quantidade >= 0)
-                    qtdadePorProduto.put(codigoProduto, itemEstoqueRep.getQtdProduto() - quantidade);
-                else 
+
+            ItemEstoque itemEstoque = listaItemEstoque.stream().filter(y -> y.getCodigo() == codigoProduto).findFirst().get().orElseThrow(null);
+            
+            if(itemEstoque == null || itemEstoque.getProduto() == null){
+                itemEstoque = estoqueService.getItemEstoque(codigoProduto);
+                
+                if(itemEstoque == null || itemEstoque.getProduto() == null)
                     return false;
+                
+                listaItemEstoque.add(itemEstoque);
             }
-            else {
-                int nqtdade = qtdadePorProduto.get(codigoProduto) - quantidade; 
-                if(nqtdade >= 0){
-                    qtdadePorProduto.replace(codigoProduto, nqtdade);
-                    quantidade += qtdadePorProduto.get(codigoProduto);
-                }
-                else 
-                    return false;
+
+            quantidade = itemEstoque.getQuantidade() - quantidade;
+
+            if(quantidade >= 0)
+                itemEstoque.setQuantidade(quantidade);
+            else 
+                return false;
+
+            ItemVenda itemLista = listaItemVenda.stream().filter(x -> x.getCodigo() == codigoProduto).findFirst().get().orElseThrow(null);
+            
+            if(itemLista != null)
+                itemLista.setQtdProduto(quantidade);
+            else{
+                itemLista = new ItemVenda(quantidade, itemEstoque.getProduto().getPreco(), IMPOSTO, itemEstoque.getProduto(), venda);
+                listaItemVenda.add(itemLista);
             }
-         if(listaItemVenda.stream().anyMatch(x -> x.getCodigo() == codigoProduto)){
-            ItemVenda itemLista = listaItemVenda.stream().filter(x -> x.getCodigo() == codigoProduto).findFirst().get();
-            listaItemVenda.remove(itemLista);
-            itemLista.setQtdProduto(quantidade);
-            listaItemVenda.add(itemLista);
-         }
-         else
-            listaItemVenda.add(new ItemVenda(quantidade, itemEstoqueRep.getProduto().getPreco(), IMPOSTO, itemEstoqueRep.getProduto(), venda));
         }
         vendaRepository.save(venda);
-        // for(ItemEstoque item: estoqueService.findAll()){
-        //     item.setQtdProduto();
-        //     estoqueService.save(estoqueService.getItemEstoque(item.getCodigo()));
-        // }
+        estoqueService.save(listaItemEstoque);
         return true;
     }
 
-    public List<Venda> vendasEfetuadas() {
-        Iterable<Venda> vendas = vendaRepository.findAll();
-        List<Venda> itens = new ArrayList<>();
-
-        for (Venda v : vendas) {
-           itens.add(v);
-        }
-        return itens;
+    public Iterable<Venda> vendasEfetuadas() {
+        return vendaRepository.findAll();
     }
     public boolean podeVender(long codProd, int qtdade){
-        ItemEstoque item = estoqueService.getItemEstoque(codProd);
-        if(item == null) return false;
-        if(qtdade > item.getQtdProduto())
+        if(qtdade <= 0)
             return false;
-        else if (qtdade < 0)return false;
-        else{
-            item.setQtdProduto(item.getQtdProduto()-qtdade);
-            estoqueService.save(item);   
-        }
+        ItemEstoque item = estoqueService.getItemEstoque(codProd);
+        if(item == null || qtdade > item.getQuantidade() || item.getQuantidade() - qtdade < 0) 
+            return false;
+
+        item.setQuantidade(item.getQuantidade()-qtdade);
         return true;
+    }
+    private void validaItemEstoque(ItemEstoque itemEstoque, int quantidade){
+        String errorMessage = "";
+        
+        if (itemEstoque == null)
+            errorMessage = "item inválido";
+        else if(itemEstoque.getQuantidade() - quantidade < 0) 
+                errorMessage = "quantidade inválida";
+
+        if(!errorMessage.isEmpty())
+            throw new IllegalArgumentException(errorMessage);
     }
 }

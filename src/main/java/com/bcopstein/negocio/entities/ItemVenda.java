@@ -49,5 +49,9 @@ public class ItemVenda {
 
     public Produto getProduto(){return this.produto;}
     public void setQtdProduto(int qtdProduto){this.qtdProduto = qtdProduto;}
+
+    public ItemVenda orElseThrow(Object object) {
+        return null;
+    }
 }
 

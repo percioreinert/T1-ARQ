@@ -14,22 +14,27 @@ public class ItemEstoque {
     @JoinColumn(name = "cod_produto")
     private Produto produto;
     
-    private int qtdProduto;
+    private int quantidade;
 
     public ItemEstoque() {}
 
-    public ItemEstoque(Produto produto, int qtdProduto) {
-        this.qtdProduto = qtdProduto;
+    public ItemEstoque(Produto produto, int quantidade) {
+        this.quantidade = quantidade;
         this.produto=produto;
     }
 
-    public int getQtdProduto(){return this.qtdProduto;}
+    public int getQuantidade(){return this.quantidade;}
+    public long getId(){return this.id;}
 
     public long getCodigo() {
         return produto.getCodigo();
     }
 
-    public void setQtdProduto(int qtdProduto){this.qtdProduto=qtdProduto;}
+    public void setQuantidade(int qtdProduto){this.quantidade=qtdProduto;}
 
     public Produto getProduto(){return this.produto;}
+
+    public ItemEstoque orElseThrow(Object object) {
+        return null;
+    }
 }

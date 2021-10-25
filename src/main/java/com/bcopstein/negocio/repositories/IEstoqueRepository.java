@@ -8,7 +8,7 @@ import java.util.List;
 public interface IEstoqueRepository {
 
     Iterable<ItemEstoque> findAll();
-    int findQtdProdutoByProduto(long codigo);
+    int findQuantidadeByProduto(long codigo);
     ItemEstoque findByProdutoCodigo(long codigo);
     ItemEstoque save(ItemEstoque item);
     boolean saveAll(List<ItemEstoque> itens);

@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
+
+
 @RestController
 @RequestMapping("/vendas")
 public class SvFachadaRemota {
@@ -37,29 +40,6 @@ public class SvFachadaRemota {
   @CrossOrigin(origins = "*")
   public List<Produto> listaProdutos() {
     return pService.findAll();
-  }
-
-  // @PostMapping("produto/cadastra")
-  // @CrossOrigin(origins = "*")
-  // public String novoProduto(@RequestBody final Produto[] p) {
-  //   for(Produto p1 : p){
-  //     if(pService.save(p1) == null) return "DEU RUIM";
-  //   }
-  //   return "FALA AE MLK";
-  // }
-  @GetMapping("/estoques")
-  @CrossOrigin(origins = "*")
-  public List<ItemEstoque> estoque() {
-    return sEstoque.findAll();
-  }
-  @PostMapping("estoque/cadastra")
-  @CrossOrigin(origins = "*")
-  public Boolean novoItemEstoque(@RequestBody final ItemEstoque[] itens) {
-
-    for(ItemEstoque item : itens){
-    sEstoque.save(item);
-    }
-    return true;
   }
 
   @GetMapping("/autorizacao")
@@ -85,9 +65,9 @@ public class SvFachadaRemota {
     return vService.vendasEfetuadas();
   }
 
-  // @PostMapping("/subtotal")
-  // @CrossOrigin(origins = "*")
-  // public Integer[] calculaSubtotal(@RequestBody final ItemEstoque[] itens) {
-  //   return service.calculaSubtotal(itens);
-  // }
+  @PostMapping("/subtotal")
+  @CrossOrigin(origins = "*")
+  public Integer[] calculaSubtotal(@RequestBody final ItemEstoque[] itens) {
+    return vService.calculaSubtotal(itens);
+  }
 }
